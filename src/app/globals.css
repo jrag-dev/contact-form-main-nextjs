@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -10,14 +11,28 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-green-lighter-custom: hsl(148, 38%, 91%);
+  --color-green-medium-custom: hsl(169, 82%, 27%);
+  --color-red-custom: hsl(0, 66%, 54%);
+  --color-white-custom: hsl(0, 0%, 100%);
+  --color-grey-500-custom: hsl(186, 15%, 59%);
+  --color-grey-900-custom: hsl(187, 24%, 22%);
+  
+  --font-display: "Karla", "sans-serif"; 
+  --font-labels-custom: 16px;
+  --font-weights-400-custom: 400;
+  --font-weights-700-custom: 700;
 }
 
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
+*/
 
 body {
   background: var(--background);
