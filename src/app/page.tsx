@@ -5,7 +5,7 @@ import { ContactSchema } from "@/schemas/contact.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form"
 import InputError from '@/components/InputError';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ToastComp from '@/components/ToastComp';
 
 type Inputs = z.input<typeof ContactSchema>;
