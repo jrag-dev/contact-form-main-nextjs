@@ -43,7 +43,7 @@ export default function Home() {
       message: '',
       terms: false
     })
-  }, [isSubmitSuccessful])
+  }, [isSubmitSuccessful, reset])
   
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     // Mostrar el toast
@@ -52,7 +52,7 @@ export default function Home() {
     console.log(data);
   }
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = () => {
     if (!errors.email?.message && watch().email !== "") {
       setFormIsValid({
         ...formIsValid,
