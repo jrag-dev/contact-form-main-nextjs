@@ -6,8 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form"
 import InputError from '@/components/InputError';
 import { ChangeEvent, useEffect, useState } from 'react';
-import Toast from '@/components/Toast';
-import { setTimeout } from 'timers/promises';
 import ToastComp from '@/components/ToastComp';
 
 type Inputs = z.input<typeof ContactSchema>;
@@ -21,7 +19,7 @@ type formIsValidType = {
 }
 
 export default function Home() {
-  const {register, handleSubmit, watch, reset, formState: { errors, isValid, isDirty, dirtyFields, isSubmitSuccessful }, } = useForm({
+  const {register, handleSubmit, watch, reset, formState: { errors, isSubmitSuccessful }, } = useForm({
     resolver: zodResolver(ContactSchema)
   });
   const [showToast, setShowToast] = useState<boolean>(false);
@@ -51,11 +49,10 @@ export default function Home() {
     // Mostrar el toast
     setToastMessage("Thanks for completing the form. We'll be in touch soon!");
     setShowToast(true);
-    
+    console.log(data);
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const field = e.target.name;
     if (!errors.email?.message && watch().email !== "") {
       setFormIsValid({
         ...formIsValid,
