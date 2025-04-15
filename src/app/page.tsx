@@ -5,8 +5,10 @@ import { ContactSchema } from "@/schemas/contact.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form"
 import InputError from '@/components/InputError';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Toast from '@/components/Toast';
+import { setTimeout } from 'timers/promises';
+import ToastComp from '@/components/ToastComp';
 
 type Inputs = z.input<typeof ContactSchema>;
 type formIsValidType = {
@@ -19,9 +21,11 @@ type formIsValidType = {
 }
 
 export default function Home() {
-  const {register, handleSubmit, watch, formState: { errors, isValid, isDirty, dirtyFields, isSubmitSuccessful }, } = useForm({
+  const {register, handleSubmit, watch, reset, formState: { errors, isValid, isDirty, dirtyFields, isSubmitSuccessful }, } = useForm({
     resolver: zodResolver(ContactSchema)
   });
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>('');
   
   const [formIsValid, setFormIsValid] = useState<formIsValidType>({
     firstName: false,
@@ -32,7 +36,23 @@ export default function Home() {
     terms: false
   })
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log('Data: ', data);
+  useEffect(() => {
+    reset({
+      firstName: '',
+      lastName: '', 
+      email: '',
+      queryType: '',
+      message: '',
+      terms: false
+    })
+  }, [isSubmitSuccessful])
+  
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    // Mostrar el toast
+    setToastMessage("Thanks for completing the form. We'll be in touch soon!");
+    setShowToast(true);
+    
+  }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const field = e.target.name;
@@ -50,12 +70,14 @@ export default function Home() {
   } 
 
   return (
-    <section className="w-full bg-green-lighter-custom h-screen grid place-items-center font-display">
+    <section className="w-full bg-green-lighter-custom min-h-screen grid place-items-center font-display">
 
-      <article className="relative w-full grid place-items-center px-4 mt-20">
-        {
-          isSubmitSuccessful && <Toast />
-        }
+      <article className="relative w-full grid place-items-center px-4 mt-10 mb-10">
+      <ToastComp
+        showMessage={showToast}
+        message={toastMessage}
+        onClose={() => setShowToast(false)}
+      />
         <form
           className="w-full max-w-[700px] bg-white px-6 py-8 rounded-2xl grid gap-5"
           onSubmit={handleSubmit(onSubmit)}
