@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form"
 import InputError from '@/components/InputError';
 import { ChangeEvent, useState } from 'react';
+import Toast from '@/components/Toast';
 
 type Inputs = z.input<typeof ContactSchema>;
 type formIsValidType = {
@@ -18,7 +19,7 @@ type formIsValidType = {
 }
 
 export default function Home() {
-  const {register, handleSubmit, watch, formState: { errors, isValid, isDirty, dirtyFields }, } = useForm({
+  const {register, handleSubmit, watch, formState: { errors, isValid, isDirty, dirtyFields, isSubmitSuccessful }, } = useForm({
     resolver: zodResolver(ContactSchema)
   });
   
@@ -50,7 +51,11 @@ export default function Home() {
 
   return (
     <section className="w-full bg-green-lighter-custom h-screen grid place-items-center font-display">
-      <article className="w-full grid place-items-center px-4">
+
+      <article className="relative w-full grid place-items-center px-4 mt-20">
+        {
+          isSubmitSuccessful && <Toast />
+        }
         <form
           className="w-full max-w-[700px] bg-white px-6 py-8 rounded-2xl grid gap-5"
           onSubmit={handleSubmit(onSubmit)}
@@ -59,7 +64,7 @@ export default function Home() {
 
           <div className="w-full flex flex-col gap-5 md:flex-row">
             <div className="w-full flex flex-col gap-2">
-              <label className="block text-grey-900-custom" htmlFor="firstName">First Name</label>
+              <label className="block text-grey-900-custom after:ml-0.5 after:text-green-medium-custom after:content-['*']" htmlFor="firstName">First Name</label>
               <input 
                 type="text" 
                 id="firstName" 
@@ -71,7 +76,7 @@ export default function Home() {
             }
             </div>
             <div className="w-full flex flex-col gap-2">
-              <label className="block text-grey-900-custom" htmlFor="lastName">Last Name</label>
+              <label className="block text-grey-900-custom after:ml-0.5 after:text-green-medium-custom after:content-['*']" htmlFor="lastName">Last Name</label>
               <input
                 type="text" 
                 id="lastName"
@@ -85,7 +90,7 @@ export default function Home() {
           </div>
 
           <div className="w-full flex flex-col gap-2">
-            <label className="block text-grey-900-custom" htmlFor="email">Email</label>
+            <label className="block text-grey-900-custom after:ml-0.5 after:text-green-medium-custom after:content-['*']" htmlFor="email">Email</label>
             <input
               type="email" 
               id="email"
@@ -99,30 +104,34 @@ export default function Home() {
           </div>
 
           <fieldset className="w-full flex flex-col gap-2">
-            <p className="block text-grey-900-custom">Query Type</p>
+            <p className="block text-grey-900-custom after:ml-0.5 after:text-green-medium-custom after:content-['*']">Query Type</p>
 
             <div className="w-full flex flex-col md:flex-row gap-4">
               <div className='w-full flex flex-col md:flex-row items-center gap-4'>
-                <div className="w-full border border-grey-500-custom rounded-md py-2.5 px-4 flex items-center gap-2">
+                <div className="has-checked:bg-green-lighter-custom w-full border border-grey-500-custom rounded-md py-2.5 px-4 flex items-center gap-2">
                   <input 
                     type="radio" 
                     id="generalSupport" 
                     value="General Enquiry"
+                    className='w-5 h-5 accent-green-medium-custom checked:ring checked:ring-green-medium-custom'
                     {...register("queryType")}
                   />
                   <label htmlFor="generalSupport" className="text-grey-900-custom font-medium">General Enquiry</label>
                 </div>
 
-                <div className="w-full border border-grey-500-custom rounded-md py-2.5 px-4 flex items-center gap-2">
+                <div className="has-checked:bg-green-lighter-custom w-full border border-grey-500-custom rounded-md py-2.5 px-4 flex items-center gap-2">
                   <input 
                     type="radio" 
                     id="supportRequest" 
                     value="Support Request"
+                    className='w-5 h-5 accent-green-medium-custom checked:ring checked:ring-green-medium-custom'
                     {...register("queryType")}
                   />
                   <label htmlFor="supportRequest" className="text-grey-900-custom font-medium">Support Request</label>
                 </div>
               </div>
+
+
             </div>
             {
               errors.queryType?.message && <InputError message={errors.queryType?.message} />
@@ -130,10 +139,10 @@ export default function Home() {
           </fieldset>
 
           <div className="w-full flex flex-col gap-2">
-            <label htmlFor="message">Message</label>
+            <label className="after:ml-0.5 after:text-green-medium-custom after:content-['*']" htmlFor="message">Message</label>
             <textarea
               id="message"
-              rows={5}
+              rows={4}
               className={`${errors.message?.message ? 'border-red-custom' : ''} bg-white border border-grey-500-custom rounded-md py-2.5 px-4 outline-0`}
               {...register("message")}
             ></textarea>
@@ -147,16 +156,17 @@ export default function Home() {
               <input 
                 type="checkbox" 
                 id="terms"
+                className='w-4 h-4 accent-green-medium-custom'
                 {...register("terms")}
               />
-              <label htmlFor="terms" className="text-grey-900-custom">I consent to being contacted by the team</label>
+              <label htmlFor="terms" className="text-grey-900-custom after:ml-0.5 after:text-green-medium-custom after:content-['*']">I consent to being contacted by the team</label>
             </div>
             {
               errors.terms?.message && <InputError message={errors.terms?.message} />
             }
           </div>
 
-          <button disabled={!isDirty || !isValid} className="bg-green-medium-custom text-white font-bold py-3 px-6 rounded-md text-center" type="submit">Submit</button>
+          <button className="bg-green-medium-custom text-white font-bold py-3 px-6 rounded-md text-center" type="submit">Submit</button>
         
         </form>
       </article>
